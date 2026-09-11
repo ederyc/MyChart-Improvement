@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fixing MyChart's County Field — Eder Yepez Cuevas</title>
+<meta name="description" content="A working demo of a redundant data-entry problem in MyChart's signup flow, and a fix.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;1,9..144,500&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="page-header">
+  <a class="back-link" href="#">&larr; Portfolio</a>
+</header>
+
+<main>
+  <section class="intro">
+    <h1>You already told it your ZIP code.<br>Why is it still asking you to find your county?</h1>
+    <p class="intro-text">MyChart's signup flow asks for city, state, and ZIP code, then hands you an unfiltered list of every county in the country to search through by hand, even though the ZIP code you just entered already determines it. Below is a working copy of that flow, and a fixed version that actually uses the data it already has.</p>
+  </section>
+
+  <section class="demo">
+    <div class="mode-toggle" role="tablist" aria-label="Choose which flow to try">
+      <button class="mode-btn active" data-mode="before" role="tab" aria-selected="true">Current MyChart flow</button>
+      <button class="mode-btn" data-mode="after" role="tab" aria-selected="false">What I'd change</button>
+    </div>
+
+    <div class="device-frame">
+      <div class="device-bar">
+        <span class="device-dot"></span>
+        <span class="device-title">Sign up</span>
+      </div>
+
+      <div class="device-body">
+
+        <form id="addressForm" class="address-form">
+          <div class="field">
+            <label for="cityInput">City</label>
+            <input type="text" id="cityInput" placeholder="e.g. Madison" autocomplete="off">
+          </div>
+          <div class="field">
+            <label for="stateInput">State</label>
+            <select id="stateInput">
+              <option value="">Select state</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="zipInput">ZIP code</label>
+            <input type="text" id="zipInput" placeholder="e.g. 53703" inputmode="numeric" maxlength="5" autocomplete="off">
+          </div>
+          <button type="submit" class="btn btn-primary">Continue</button>
+        </form>
+
+        <div id="countyStep" class="county-step" hidden>
+
+          <!-- BEFORE: unfiltered manual dropdown -->
+          <div id="beforeCounty" class="before-county" hidden>
+            <label for="countySelectBefore">Select your county</label>
+            <p class="field-note"><span id="countyTotalCount">0</span> counties to choose from. Yours is in here somewhere.</p>
+            <select id="countySelectBefore">
+              <option value="">Choose a county&hellip;</option>
+            </select>
+            <button type="button" id="confirmBefore" class="btn btn-primary" disabled>Confirm</button>
+            <p class="timer-note">Time on this screen: <span id="timerBefore">0.0s</span></p>
+          </div>
+
+          <!-- AFTER: auto-detected -->
+          <div id="afterCounty" class="after-county" hidden>
+            <div id="afterResult" class="after-result"></div>
+            <button type="button" id="revealManual" class="link-btn">Not right? Choose manually</button>
+            <div id="manualFallback" class="manual-fallback" hidden>
+              <label for="countySelectAfter">Select your county</label>
+              <p class="field-note">Narrowed to <span id="countyStateCount">0</span> counties in your state.</p>
+              <select id="countySelectAfter"></select>
+              <button type="button" id="confirmAfter" class="btn btn-primary" disabled>Confirm</button>
+            </div>
+            <p class="timer-note">Time on this screen: <span id="timerAfter">0.0s</span></p>
+          </div>
+
+        </div>
+
+        <div id="doneStep" class="done-step" hidden>
+          <p class="done-check">&#10003; County confirmed</p>
+          <p class="done-detail" id="doneDetail"></p>
+          <button type="button" id="tryAgain" class="link-btn">Try another ZIP</button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="stat-strip" aria-hidden="true">
+      <div class="stat">
+        <span class="stat-num">3,282</span>
+        <span class="stat-label">counties in the unfiltered list</span>
+      </div>
+      <div class="stat stat-accent">
+        <span class="stat-num">1</span>
+        <span class="stat-label">auto-detected option in the fix, editable if wrong</span>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="page-footer">
+  <p>Built with a real ZIP-to-county dataset (~40,900 active U.S. ZIP codes), not mock data. Eder Yepez Cuevas.</p>
+</footer>
+
+<script src="js/app.js"></script>
+</body>
+</html>
